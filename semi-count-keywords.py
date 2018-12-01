@@ -6,7 +6,6 @@ from operator import add
 '''
  Iput: all pre-processed csv files of tweets ["user_id", "list of keywords in the tweet"]
  Output: single csv file containing semi-sorted, semi-reduced counts of keywords ["user_id_keyword", "count"]
- ...
 '''
 
 # INITIALIZATION
@@ -15,10 +14,10 @@ sc = SparkContext("local[*]", "Big Data Project Python")
 # FUNCTIONS
 def init_counts(line):
     new_lines = []
-    userid = str(line[0])
+    user_id = str(line[0])
     text = str(line[1])
     for keyword in text.split(" "):
-        new_line = [userid + "_" + keyword, 1]
+        new_line = [user_id + "_" + keyword, 1]
         new_lines.append(new_line)
     return new_lines
 
