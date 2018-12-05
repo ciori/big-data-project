@@ -6,13 +6,13 @@ import re
 for partition in range(3,4):#range(1,29):
     print(partition)
     # open input CSV
-    csv_input_file = open('/media/fabio/Data2/full-database/tweets/tweet_text_' + str(partition) + '.csv', 'r')
-    #csv_input_file = open('/home/ciori/Unitn/Big Data/tweets-database/tweet-keyword/tweet_text_03.csv', 'r')
+    #csv_input_file = open('/media/fabio/Data2/full-database/tweets/tweet_text_' + str(partition) + '.csv', 'r')
+    csv_input_file = open("/home/ciori/Unitn/Big Data/tweets-database/tweet-text/tweet_text_" + str(partition) + ".csv", 'r')
     csv_input_reader = csv.reader(csv_input_file)
 
     # open output CSV
-    csv_output_file = open('/media/fabio/Data2/full-database/pre-processed/tweet_keyword_' + str(partition) + '.csv', 'w')
-    #csv_output_file = open('/home/ciori/Unitn/Big Data/tweets-database/tweet-keyword/tweet_keywords_latest.csv', 'w')
+    #csv_output_file = open('/media/fabio/Data2/full-database/pre-processed/tweet_keyword_' + str(partition) + '.csv', 'w')
+    csv_output_file = open("/home/ciori/Unitn/Big Data/tweets-database/tweet-keyword/tweet_keywords_" + str(partition) + ".csv", 'w')
     csv_output_reader = csv.writer(csv_output_file)
 
     # process tweets
