@@ -21,7 +21,8 @@ def init_counts(line):
     user_id = str(line[0])
     text = str(line[1])
     for keyword in text.split(" "):
-        new_line = [user_id + "_" + keyword, 1]
+        #new_line = [user_id + "_" + keyword, 1]
+        new_line = [user_id, keyword, 1]
         new_lines.append(new_line)
     return new_lines
 
@@ -34,13 +35,16 @@ for partition in range(3, 4):#range(1, 29):
         chunknumber = chunknumber + 1
         keywords = sc.parallelize(chunk.values.tolist())
         counts_mono = keywords.flatMap(lambda x: init_counts(x))
-        counts_reduced = counts_mono.reduceByKey(add)
-        counts_reduced_sorted = counts_reduced.sortByKey()
+        # save processed chunk into the database
+        
+        
+        #counts_reduced = counts_mono.reduceByKey(add)
+        #counts_reduced_sorted = counts_reduced.sortByKey()
 
         # test
 
-        df = counts_reduced_sorted.toDF()
-        df.write.csv(path="/home/ciori/Unitn/Big Data/tweets-database/keyword-count/keyword_count_" + str(partition) + ".csv", mode='append')
+        #df = counts_reduced_sorted.toDF()
+        #df.write.csv(path="/home/ciori/Unitn/Big Data/tweets-database/keyword-count/keyword_count_" + str(partition) + ".csv", mode='append')
 
         '''# save results into mysql database
         print("---- toDF... ----")

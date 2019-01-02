@@ -4,14 +4,12 @@ import re
 # Pre-process tweet_text CSV files to transform each text into a list of keywords
 
 for partition in range(3,4):#range(1,29):
-    print(partition)
+
     # open input CSV
-    #csv_input_file = open('/media/fabio/Data2/full-database/tweets/tweet_text_' + str(partition) + '.csv', 'r')
     csv_input_file = open("/home/ciori/Unitn/Big Data/tweets-database/tweet-text/tweet_text_" + str(partition) + ".csv", 'r')
     csv_input_reader = csv.reader(csv_input_file)
 
     # open output CSV
-    #csv_output_file = open('/media/fabio/Data2/full-database/pre-processed/tweet_keyword_' + str(partition) + '.csv', 'w')
     csv_output_file = open("/home/ciori/Unitn/Big Data/tweets-database/tweet-keyword/tweet_keywords_" + str(partition) + ".csv", 'w')
     csv_output_reader = csv.writer(csv_output_file)
 
@@ -44,9 +42,5 @@ for partition in range(3,4):#range(1,29):
         # remove unwanted whitespaces
         cleaned_text = cleaned_text.replace(' ', '', 1)
         cleaned_text = ' '.join(cleaned_text.split())
-        # print texts
-        #print(row[2])
-        #print(cleaned_text)
-        #print()
         # save cleaned text into the output CSV
         csv_output_reader.writerow([row[1], cleaned_text])
