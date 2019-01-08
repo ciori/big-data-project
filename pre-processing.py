@@ -11,7 +11,7 @@ for partition in range(3,4):#range(1,29):
 
     # open output CSV
     csv_output_file = open("/home/ciori/Unitn/Big Data/tweets-database/tweet-keyword/tweet_keywords_" + str(partition) + ".csv", 'w')
-    csv_output_reader = csv.writer(csv_output_file)
+    csv_output_writer = csv.writer(csv_output_file)
 
     # process tweets
     for row in csv_input_reader:
@@ -43,4 +43,4 @@ for partition in range(3,4):#range(1,29):
         cleaned_text = cleaned_text.replace(' ', '', 1)
         cleaned_text = ' '.join(cleaned_text.split())
         # save cleaned text into the output CSV
-        csv_output_reader.writerow([row[1], cleaned_text])
+        csv_output_writer.writerow([row[1], cleaned_text])
