@@ -1,1 +1,2 @@
--- List of SQL queries used in DBeaver
+-- List of SQL queries used for the project
+-- ...
