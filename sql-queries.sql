@@ -1,0 +1,1 @@
+-- List of SQL queries used in DBeaver

@@ -29,6 +29,7 @@ intervals_reader = csv.reader(intervals_file)
 
 # process each interval of user ids
 iteration = 1
+#for interval in [(0,1000000000)]:
 for interval in intervals_reader:
     
     print("Iteration " + str(iteration) + ", Interval: " + str(interval) + " started at " + str(datetime.datetime.now()))
@@ -54,7 +55,7 @@ for interval in intervals_reader:
 
     initial_keywords_and_counts = users_keywords_rdd.map(lambda x: init_keywords_and_counts(x))
 
-    def count_keywords_top_10(list1, list2):
+    def count_keywords_raw(list1, list2):
         # reduce keywords and counts
         reduced_list = dict([])
         for l in list1:
@@ -67,13 +68,17 @@ for interval in intervals_reader:
                 reduced_list[l[0]] += l[1]
             else:
                 reduced_list[l[0]] = l[1]
-        # keep top 10
-        ordered_list = list(reduced_list.items())
-        ordered_list.sort(key=operator.itemgetter(1), reverse=True)
-        top_10 = ordered_list[:10]
-        return top_10
+        return list(reduced_list.items())
 
-    users_profiles_top_10 = initial_keywords_and_counts.reduceByKey(lambda x,y: count_keywords_top_10(x, y))
+    users_profiles_raw = initial_keywords_and_counts.reduceByKey(lambda x,y: count_keywords_raw(x, y))
+
+    def keep_top_10(line):
+        # keep top 10
+        line[1].sort(key=operator.itemgetter(1), reverse=True)
+        top_10 = line[1][:10]
+        return [line[0], top_10]
+
+    users_profiles_top_10 = users_profiles_raw.map(lambda x: keep_top_10(x))
 
     # save user profile into csv
     output_writer.writerows(users_profiles_top_10.collect())
