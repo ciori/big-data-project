@@ -29,7 +29,10 @@ for u in range(0, num_of_iterations):
 
     # query to the database table users_keywords
     cur = connection.cursor()
-    cur.execute("select min(user_id) as min, max(user_id) as max from (select distinct user_id from public.users_keywords order by user_id offset " + str(offset) + " limit " + str(users_per_iteration) + ") as a")
+    cur.execute("select min(user_id) as min, max(user_id) as max from " + 
+                "(select distinct user_id " + 
+                 "from public.users_keywords " + 
+                 "order by user_id offset " + str(offset) + " limit " + str(users_per_iteration) + ") as a")
     for min_id, max_id in cur.fetchall():
         # add the interval to the list
         intervals.append((min_id, max_id))

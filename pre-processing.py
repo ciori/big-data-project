@@ -4,7 +4,7 @@ import re
 # Pre-Processing: takes tweet_text CSV files to transform each text into a list of keywords
 
 # each partition corresponds to a single data_xx folder of data
-for partition in range(3,4):                        # used during testing to compute only one partition
+for partition in range(1,2):                        # used during testing to compute only one partition
 #for partition in range(1,29):                      # used when computing the whole Twitter database
 
     # open input CSV tweet_text_xx
