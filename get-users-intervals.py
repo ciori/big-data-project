@@ -16,7 +16,7 @@ output_writer = csv.writer(output_file)
 connection = pgdb.connect(host="localhost", user="postgres", password="", database="tweetsdb")
 
 # iterations values
-num_of_iterations = 40
+num_of_iterations = 100 # 40 for data_03
 users_per_iteration = 200000
 intervals = []
 
@@ -34,11 +34,10 @@ for u in range(0, num_of_iterations):
                  "from public.users_keywords " + 
                  "order by user_id offset " + str(offset) + " limit " + str(users_per_iteration) + ") as a")
     for min_id, max_id in cur.fetchall():
+        print((min_id, max_id))
         # add the interval to the list
         intervals.append((min_id, max_id))
     cur.close()
-
-    print(intervals)
 
     print("    done at: " + str(datetime.datetime.now()))
 
