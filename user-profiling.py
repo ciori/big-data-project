@@ -20,12 +20,12 @@ ss = SparkSession \
 sc = ss.sparkContext
 
 # set users profilings output csv
-output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/user_profile_top_10.csv"
+output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/user_profile_top_10_65mil.csv"
 output_file = open(output_path, "a")
 output_writer = csv.writer(output_file)
 
 # get users ids intervals from csv
-intervals_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/users_intervals.csv"
+intervals_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/users_intervals_65mil.csv"
 intervals_file = open(intervals_path, "r")
 intervals_reader = csv.reader(intervals_file)
 
@@ -44,8 +44,7 @@ for interval in intervals_reader:
         .load()
     
     # prepare the rdd from the dataframe and partition it to work with 4 executors (to use 4 cores)
-    users_keywords_rdd = users_keywords.rdd
-    users_keywords_rdd = users_keywords_rdd.repartition(4)
+    users_keywords_rdd = users_keywords.rdd.repartition(4)
 
     # function to initially set each keyword with a count of 1
     def init_keywords_and_counts(line):
