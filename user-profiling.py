@@ -20,12 +20,12 @@ ss = SparkSession \
 sc = ss.sparkContext
 
 # set users profilings output csv
-output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/TEST_user_profile_top_10_25000.csv"
+output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/user_profile_top_10.csv"
 output_file = open(output_path, "a")
 output_writer = csv.writer(output_file)
 
 # get users ids intervals from csv
-intervals_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/TEST_users_intervals_25000.csv"
+intervals_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/users_intervals.csv"
 intervals_file = open(intervals_path, "r")
 intervals_reader = csv.reader(intervals_file)
 

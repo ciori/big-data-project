@@ -15,8 +15,8 @@ output_writer = csv.writer(output_file)
 # connect to the PostgreSQL database
 connection = pgdb.connect(host="localhost", user="postgres", password="", database="tweetsdb")
 
-# iterations values
-num_of_iterations = 100 # 40 for data_03
+# iterations values (values to use with data_01, data_03 and data_05 of the whole Twitter dataset)
+num_of_iterations = 100
 users_per_iteration = 200000
 intervals = []
 
