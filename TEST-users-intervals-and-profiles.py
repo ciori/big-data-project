@@ -1,6 +1,7 @@
 import csv
 import datetime
 import operator
+import pgdb
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
@@ -20,27 +21,43 @@ ss = SparkSession \
 sc = ss.sparkContext
 
 # set users profilings output csv
-output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/TEST_user_profile_top_10_25000.csv"
+output_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/TEST_users_intervals_and_profiles.csv"
 output_file = open(output_path, "a")
 output_writer = csv.writer(output_file)
 
-# get users ids intervals from csv
-intervals_path = "/home/ciori/Unitn/Big Data/tweets-database/user-profile/TEST_users_intervals_25000.csv"
-intervals_file = open(intervals_path, "r")
-intervals_reader = csv.reader(intervals_file)
+# connect to the PostgreSQL database
+connection = pgdb.connect(host="localhost", user="postgres", password="", database="tweetsdb")
 
-# process each interval of users' ids
-iteration = 1
-for interval in intervals_reader:
+# iterations values
+num_of_iterations = 6
+users_per_iteration = 200000
+
+# for each decided iteration
+for u in range(0, num_of_iterations):
+
+    offset = u * users_per_iteration
     
-    print("Iteration " + str(iteration) + ", Interval: " + str(interval) + " started at " + str(datetime.datetime.now()))
+    print("Iteration " + str(u+1) + "/" + str(num_of_iterations) + " started at " + str(datetime.datetime.now()))
+
+    # get users interval
+    min_id = 0
+    max_id = 0
+    cur = connection.cursor()
+    cur.execute("select min(user_id) as min, max(user_id) as max from " + 
+                "(select distinct user_id " + 
+                 "from public.users_keywords " + 
+                 "order by user_id offset " + str(offset) + " limit " + str(users_per_iteration) + ") as a")
+    for minid, maxid in cur.fetchall():
+        min_id = minid
+        max_id = maxid
+    cur.close()
 
     # query the database with spark to obtain the actual interval of users' keywords
     users_keywords = ss.read \
         .format("jdbc") \
         .option("url", "jdbc:postgresql://localhost:5432/tweetsdb") \
         .option("user", "postgres") \
-        .option("query", "select * from public.users_keywords where user_id>='" + str(interval[0]) + "' and user_id<='" + str(interval[1]) + "'") \
+        .option("query", "select * from public.users_keywords where user_id>='" + str(min_id) + "' and user_id<='" + str(max_id) + "'") \
         .load()
     
     # prepare the rdd from the dataframe and partition it to work with 4 executors (to use 4 cores)
@@ -91,6 +108,8 @@ for interval in intervals_reader:
     output_writer.writerows(users_profiles_top_10.collect())
 
     print("    done at: " + str(datetime.datetime.now()))
-    iteration += 1
+
+# close the database connection
+connection.close()
 
 print("Finished at: " + str(datetime.datetime.now()))
